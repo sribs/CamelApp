@@ -99,6 +99,7 @@ Note: Unnecessary use of -X or --request, GET is already inferred.
 < Server: Werkzeug/0.14.1 Python/3.7.2                                                                                  
 < Set-Cookie: ARRAffinity=87619c1bcf9edccdaac372052beb202b1e23bea2f0bb9af0a9b2e6d69dff1808;Path=/;HttpOnly;Domain=camelcase.azurewebsites.net                                                                                                  
 < Date: Sun, 03 Mar 2019 06:34:56 GMT                                                                                   
-<                                                                                                                       {"one":"One","two":"Two"}                                                                                               
+<                                                                                                                       
+{"one":"One","two":"Two"}                                                                                               
 * Connection #0 to host camelcase.azurewebsites.net left intact  
 ```

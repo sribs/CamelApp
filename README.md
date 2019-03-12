@@ -1,6 +1,6 @@
 # RESTful Services string to CamelCase Converter using Python Flask
 
-String to CamelCase coverter using Zipf's Law.
+String to CamelCase coverter using Zipf's Law for standalone Applications and Dictionary API implementation for Distributed Systems.
 
 ## Motivation
 picking a word from the English Dictionary is uniformly distributed. So, using relative frequencies for all the words is reasonable and Zipf's law makes use of the same underlying theory.
@@ -13,7 +13,7 @@ Thus the most frequent word will occur about twice as often as the second most f
 
 ## Assumptions
 1. The input shall be string of non-spaced lowercase english alphabet or integers
-2. No dictionary API is needed.
+2. Dictionary API is needed if only using distributed version of the Implementation.
 3. Pre-requisites are installed and if using Azure, knowledge of Creating containerized applications using Azure AppServices or creating container instance
 
 ## Reasons for Change
@@ -26,17 +26,27 @@ Thus the most frequent word will occur about twice as often as the second most f
 2. `JSONOps.py` : Class for Handling JSON Operations for RESTful Services
 3. `CamelFlask.py` : Python Flask RESTful webservice running on port 80
 4. `files/CamelCase.json` : JSON file used for File Storage during RESTful Services Operations
+5. `Dictionary.py` : Python Class which makes call to the Dictionary API and Get the status of the results
 
 ## Usage
 #### API Setup
 ##### Using in Physical Machines
    ``` bash
    root@localhost $ git clone https://github.com/sribs/CamelApp.py  
+   
+   For standalone installation:
    root@localhost $ python CamelApp/CamelFlask.py
+   
+   For Distributed version installation
+   root@localhost $ python CamelApp/CamelFlask.py <Dictionary API Endpoint> [<App ID> <App Key>]
    ```
 ##### Using Containers Commandline
    ``` bash
+   For Standalone installation:
    root@localhost $ docker run sriharshabs/camelcaseapp:latest
+   
+   For Distributed version installation:
+   root@localhost $ docker run sriharshabs/camelappnetwork:test
    ```
 ##### Using Azure Container Instance or Azure AppService
     Please follow the Portal On Screen Instructions

@@ -1,4 +1,5 @@
 from math import log
+from Dictionary import Dictionary
 import re, gzip, os
 
 class CamelCase:
@@ -20,6 +21,10 @@ class CamelCase:
         self.word_cost = {k:log((i+1)*log(len(words))) for i,k in enumerate(words)}
         self.max_word_length = max(len(word) for word in words)
         self.regex_split = re.compile("[^a-zA-Z0-9']+")
+
+    def initialize_camel_case_api(self,api_url,app_id="",app_key=""):
+        self.cache = {}
+        self.camel_dict = Dictionary(api_url,app_id=app_id,app_key=app_key)
     
     def convert_camel_case(self,string):
         ''' Check and if string can be converted to integers '''
@@ -35,6 +40,7 @@ class CamelCase:
         def best_match(first_i):
             # best match for first i characters assuming cost is available for i-1
             candidates = enumerate(reversed(cost[max(0, first_i-self.max_word_length):first_i]))
+            print(candidates)
             return min((c + self.word_cost.get(substr[first_i-k-1:first_i].lower(), 9e999), k+1) for k,c in candidates)
         
         cost=[0]
@@ -47,9 +53,11 @@ class CamelCase:
         i = len(substr)
         while i>0:
             c,k = best_match(i)
+            print(c,k,cost[i])
             assert c == cost[i]
             # Apostrophe and digit handling
             newToken = True
+            print(substr[i-k:i])
             if not substr[i-k:i] == "'": # ignore a lone apostrophe
                 if len(out) > 0:
                     # re-attach split 's and split digits
@@ -62,5 +70,23 @@ class CamelCase:
                 out.append(substr[i-k:i])
 
             i -= k
-
+        print(out)
         return reversed(out)
+
+    def convert_camelcase_dp(self,string,min_length=1):
+        def convert_camelcase_dp_util(string,min_length=1):
+            if string in self.cache:
+                return self.cache[string]
+            if string == "":
+                return []
+            for i in range(min_length,len(string)+1):
+                if self.camel_dict.is_word(string[:i]):
+                    remaining = convert_camelcase_dp_util(string[i:])
+                    if remaining is not None:
+                        result = [string[:i]] + remaining
+                        self.cache[string] = result
+                        return result
+            self.cache[string] = None
+            return None
+        result_list = convert_camelcase_dp_util(string)
+        return result_list[0]+"".join([string.capitalize() for string in result_list[1:]])
